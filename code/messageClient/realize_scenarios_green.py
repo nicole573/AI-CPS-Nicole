@@ -8,7 +8,7 @@ import platform
 import numpy
 from datetime import datetime
 
-##Mein erster Kommentar
+##Mein erster Kommentar erweitert
 
 def build_docker_file_for_publication_at_dockerhub(scenario, knowledge_base, activation_base, code_base, learning_base, sender, receiver, hostArch, logDirectory):
      """
