@@ -8,6 +8,8 @@ import platform
 import numpy
 from datetime import datetime
 
+##Mein erster Kommentar
+
 def build_docker_file_for_publication_at_dockerhub(scenario, knowledge_base, activation_base, code_base, learning_base, sender, receiver, hostArch, logDirectory):
      """
      This functions builds docker file for ANN storage at Docker's hub.
