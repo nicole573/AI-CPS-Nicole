@@ -8,6 +8,7 @@ __author__ = 'Marcus Grum, marcus.grum@uni-potsdam.de'
 
 # with friendly permissions by Marcus Grum:
 __thesis_author__ = 'Lena Siegmund, siegmund2@uni-potsdam.de'
+__changes_author__ = 'Nicole Martin'
 
 # SPDX-License-Identifier: AGPL-3.0-or-later or individual license
 # SPDX-FileCopyrightText: 2022 Marcus Grum <marcus.grum@uni-potsdam.de>
