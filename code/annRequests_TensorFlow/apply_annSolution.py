@@ -22,7 +22,8 @@ Then, activation results are stored at the 'activationBase' of docker volume 'ai
 """
 
 __author__ = 'Marcus Grum, marcus.grum@uni-potsdam.de'
-# SPDX-License-Identifier: AGPL-3.0-or-later or individual license
+__changeauthor__= 'Nicole Martin, martin12@uni-potsdam.de'
+# SPDX-License-Identifier: AGPL-3.0-or-lat@er or individual license
 # SPDX-FileCopyrightText: 2022 Marcus Grum <marcus.grum@uni-potsdam.de>
 
 # library imports
