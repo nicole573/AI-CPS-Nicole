@@ -1,3 +1,18 @@
+"""
+Starts a Mosquitto MQTT broker, logs its activity, and registers it on the local network via mDNS.
+
+Features:
+- Retrieves and logs the broker's local IP to a file.
+- Registers the broker using Zeroconf as a `_mqtt._tcp.local.` service.
+- Starts the Mosquitto broker using a local config file (`mosquitto.conf`).
+- Logs broker output to both console and `broker_logs.log`.
+- Handles graceful shutdown and mDNS service cleanup.
+
+Requires:
+- Mosquitto installed and in system PATH.
+- `zeroconf` Python package.
+"""
+
 import os
 import socket
 import subprocess
@@ -5,7 +20,7 @@ import logging
 import datetime
 from zeroconf import ServiceInfo, Zeroconf
 
-# log file and config settings
+# Log file and config settings
 broker_logfile = "mosquitto.log"
 
 # logging to log in cmd and file, does not work properly..
@@ -81,7 +96,6 @@ def start_mqtt_broker_and_log():
             ["mosquitto", "-c", config_path, "-v"],  # -v for detailed Logging
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            # text=True,
         )
 
         print("Log file created. Broker is running. Press CTRL+C to terminate.")
@@ -92,13 +106,13 @@ def start_mqtt_broker_and_log():
             if output == "" and process.poll() is not None and error_output == "":
                 break
             if output:
-                output_str = output.strip().decode("utf-8")  # decrypt and strip
-                print(output_str)  # show in cmd
-                logging.info(output_str)  # log in logfile
+                output_str = output.strip().decode("utf-8")  # Decrypt and Strip
+                print(output_str)  # Show in CMD
+                logging.info(output_str)  # Log to logfile
             if error_output:
                 error_output_str = error_output.strip().decode("utf-8")
-                print(error_output_str)  # show error in cmd
-                logging.error(error_output_str)  # log error in log-file
+                print(error_output_str)  # Show error in CMD
+                logging.error(error_output_str)  # Log error to logfile
     except FileNotFoundError:
         logging.error("Mosquitto not found. Is it installed and in PATH?")
         print("Error: Mosquitto not found. Please make sure it is installed.")

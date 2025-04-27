@@ -1,8 +1,14 @@
+"""
+Discovers an MQTT broker on the local network using mDNS (Zeroconf).
+"""
 from zeroconf import ServiceBrowser, Zeroconf, ServiceListener
 import time
 import socket
 
 class MQTTBrokerListener(ServiceListener):
+    """
+    Listener class to detect and store MQTT broker information via Zeroconf.
+    """
     def __init__(self):
         self.broker_info = None
 
@@ -22,6 +28,9 @@ class MQTTBrokerListener(ServiceListener):
 
 
 def discover_broker(service_type="_mqtt._tcp.local.", timeout=5):
+    """
+    Discovers an MQTT broker on the local network within a timeout period.
+    """
     zeroconf = Zeroconf()
     listener = MQTTBrokerListener()
     browser = ServiceBrowser(zeroconf, service_type, listener)
