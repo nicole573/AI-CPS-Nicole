@@ -70,6 +70,26 @@ def convert_to_tflite(model, output_path="converted_model.tflite"):
     
     print(f"The TensorFlow Lite model has been successfully saved to {output_path}.")
 
+def tflite_predict(tflite_model_path, test_batch):
+    import tensorflow as tf
+    interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    results = []
+    filepaths = test_batch.filepaths
+    for i in range(len(filepaths)):
+        # Lade und preprocess das Bild wie im Batch
+        img = test_batch[i][0]
+        # Falls nötig, auf float32 casten
+        if img.dtype != np.float32:
+            img = img.astype(np.float32)
+        interpreter.set_tensor(input_details[0]['index'], img)
+        interpreter.invoke()
+        output_data = interpreter.get_tensor(output_details[0]['index'])
+        results.append(output_data)
+    return results
+
 def openAnnSolution():
     """
     This function opens a pretrained ANN from the 'knowledgeBase' of docker volume 'ai_system'.
@@ -113,7 +133,21 @@ def applyAnnSolution():
     .flow_from_directory(directory=pathActivationBase, target_size=(IMG_SIZE,IMG_SIZE) , shuffle = False)
 
     # calculate predictions for input image/s
-    predictions = model.predict(test_batch)
+    # calculate predictions for input image/s using TFLite
+    tflite_model_path = "/tmp/" + sender + "/knowledgeBase/currentSolution.tflite"
+    predictions = []
+    interpreter = tf.lite.Interpreter(model_path=tflite_model_path)
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    for i in range(len(test_batch)):
+        img = test_batch[i][0]
+        if img.dtype != np.float32:
+            img = img.astype(np.float32)
+        interpreter.set_tensor(input_details[0]['index'], img)
+        interpreter.invoke()
+        output_data = interpreter.get_tensor(output_details[0]['index'])
+        predictions.append(output_data[0])
 
     # end time measurement (for evaluation purposes)
     end = timeit.default_timer()
