@@ -44,6 +44,28 @@ pc_name = "LenasPC"
 # mac_address = ':'.join(format(x, '02x') for x in uuid.getnode().to_bytes(6, 'big'))
 
 hostArch = platform.machine()
+# Nicole: parameter für coral dev 
+coral_dev_board = False
+try:
+    if os.path.exists("/proc/device-tree/model"):
+        with open("/proc/device-tree/model", "r") as f:
+            device_model = f.read().lower()
+            if "phanbell" in device_model or "freescale" in device_model:
+                coral_dev_board = True
+            elif "raspberry pi" in device_model:
+                coral_dev_board = False
+    else:
+        # Fallback: Prüfe cpuinfo
+        with open("/proc/cpuinfo", "r") as f:
+            cpuinfo = f.read().lower()
+            if "phanbell" in cpuinfo or "freescale" in cpuinfo:
+                coral_dev_board = True
+            elif "raspberry pi" in cpuinfo:
+                coral_dev_board = False
+except Exception as e:
+    print(f"Could not determine board type: {e}")
+
+print(f"Coral Dev Board detected: {coral_dev_board}")
 
 # Log directory for task results
 project_root = os.getcwd()  # main dir
@@ -247,7 +269,17 @@ def task_worker():
             print("Stopping task worker.")
             break
 
+        # credits by Lena :D
         scenario, knowledge_base, activation_base, code_base, learning_base, sender, receiver = unroll_message(message)
+        # Coral dev board host arch abfragen TODO
+        # if hostArch == "XXX": 
+        # if ander_marmkmal == parameter coral:
+        #    code_base = marcusgrum/tflite_image --> ist ja in meinem account gepusht! curlynici/tflite_image
+
+        # Coral Dev Board: Anderes Image verwenden
+        if hostArch == "aarch64" and coral_dev_board:
+            # Passe das Image ggf. an (hier als Beispiel)
+            code_base = "curlynici/tflite_image"
         
         if receiver == client_id:
             executor.realize_scenario(
