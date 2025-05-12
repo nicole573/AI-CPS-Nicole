@@ -111,7 +111,7 @@ def build_docker_compose_file_for_apply_annSolution(scenario, knowledge_base, ac
                f.write('    external: true'+'\n')
 
      # if architecture = 'aarch64' #Nicole: and NOT Coral Dev Board (also Raspberry Pi)
-     if (hostArch == 'aarch64') and (not coral_dev_board):
+     if (hostArch == 'aarch64'):
           with open(logDirectory+'/'+sender+'-docker-compose.yml', 'w') as f:
                f.write('version: "3.9"'+'\n')
                f.write('services:'+'\n')
@@ -193,45 +193,7 @@ def build_docker_compose_file_for_apply_annSolution(scenario, knowledge_base, ac
      ai_system:
      external: true
      """
-     # if architecture = 'TODO' und musst auch den param fürs coral dev abfragen wenn das gleich zu pis ist
-     if (hostArch == 'aarch64') and coral_dev_board:
-          with open(logDirectory+'/'+sender+'-docker-compose.yml', 'w') as f:
-               f.write('version: "3.0"'+'\n')
-               f.write('services:'+'\n')
-               f.write('  knowledge_base_'+sender+':\n') # e.g. marcusgrum/knowledgebase_apple_banana_orange_pump_20
-               f.write('    image: ' + knowledge_base + ''+'\n')
-               f.write('    volumes:'+'\n')
-               f.write('       - ai_system:/tmp/'+''+'\n')
-               f.write('    command:'+'\n')
-               f.write('    - sh'+'\n')
-               f.write('    - "-c"'+'\n')
-               f.write('    - |'+'\n')
-               f.write('      rm -rf /tmp/'+sender+'/knowledgeBase/ && mkdir -p /tmp/' + sender+'/knowledgeBase/ && cp -r /knowledgeBase/ /tmp/'+sender+'/;'+'\n')
-               f.write('  activation_base_'+sender+':\n') # e.g. marcusgrum/activationbase_apple_okay_01
-               f.write('    image: ' + activation_base + ''+'\n')
-               f.write('    volumes:'+'\n')
-               f.write('       - ai_system:/tmp/'+''+'\n')
-               f.write('    command:'+'\n')
-               f.write('    - sh'+'\n')
-               f.write('    - "-c"'+'\n')
-               f.write('    - |'+'\n')
-               f.write('      rm -rf /tmp/'+sender+'/activationBase/ && mkdir -p /tmp/' + sender+'/activationBase/ && cp -r /activationBase/ /tmp/'+sender+'/;'+'\n')
-               f.write('  code_base_'+sender+':\n') 
-               f.write('    image: ' + code_base + '_' + hostArch + '\n') # e.g. marcusgrum/codebase_ai_core_for_image_classification_x86_64 
-               f.write('    volumes:'+'\n')
-               f.write('       - ai_system:/tmp/'+''+'\n')
-               f.write('    depends_on:'+'\n')
-               f.write('      - "knowledge_base_'+sender+'"'+'\n')
-               f.write('      - "activation_base_'+sender+'"'+'\n')
-               f.write('    command:'+'\n')
-               f.write('    - sh'+'\n')
-               f.write('    - "-c"'+'\n')
-               f.write('    - |'+'\n')
-               f.write('      rm -rf /tmp/'+sender+'/codeBase/ && mkdir -p /tmp/' + sender+'/codeBase/ && cp -r /codeBase/ /tmp/'+sender+'/;'+'\n')
-               f.write('      python3 /tmp/'+sender + '/codeBase/apply_annSolution_custom.py ' + sender + " " + receiver + ';\n') # custom, weil wir das für das dev board von der cpu nutzen müssen und nicht das normale tensorflow ding
-               f.write('volumes:'+'\n')
-               f.write('  ai_system:'+'\n')
-               f.write('    external: true'+'\n')
+#code-block coral wieder reinmachen
 
 def build_docker_compose_file_for_apply_annSolution_of_transportClassification(
           scenario, 
