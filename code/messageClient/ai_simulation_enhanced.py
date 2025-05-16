@@ -276,6 +276,11 @@ def task_worker():
         # if ander_marmkmal == parameter coral:
         #    code_base = marcusgrum/tflite_image --> ist ja in meinem account gepusht! curlynici/tflite_image
 
+        # Coral Dev Board: Anderes Image verwenden
+        if hostArch == "aarch64" and coral_dev_board:
+            # Passe das Image ggf. an (hier als Beispiel)
+            code_base = "curlynici/tflite_image"
+
         
         if receiver == client_id:
             executor.realize_scenario(
