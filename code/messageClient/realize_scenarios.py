@@ -18,8 +18,8 @@ def build_docker_file_for_publication_at_dockerhub(scenario, knowledge_base, act
                f.write('FROM busybox'+'\n')
                f.write(
                     'ADD ./'+sender+'_currentSolution.h5  /knowledgeBase/currentSolution.h5'+'\n')
-#Nicole Parameter coral_dev_board = False ergänzt
-def build_docker_compose_file_for_apply_annSolution(scenario, knowledge_base, activation_base, code_base, learning_base, sender, receiver, hostArch, logDirectory, coral_dev_board=False):
+
+def build_docker_compose_file_for_apply_annSolution(scenario, knowledge_base, activation_base, code_base, learning_base, sender, receiver, hostArch, logDirectory):
      """
      This functions builds docker-compose file for scenario called apply_annSolution
      and considers variables from message, here.
@@ -110,7 +110,7 @@ def build_docker_compose_file_for_apply_annSolution(scenario, knowledge_base, ac
                f.write('  ai_system:'+'\n')
                f.write('    external: true'+'\n')
 
-     # if architecture = 'aarch64' #Nicole: and NOT Coral Dev Board (also Raspberry Pi)
+     # if architecture = 'aarch64'
      if (hostArch == 'aarch64'):
           with open(logDirectory+'/'+sender+'-docker-compose.yml', 'w') as f:
                f.write('version: "3.9"'+'\n')
@@ -150,50 +150,6 @@ def build_docker_compose_file_for_apply_annSolution(scenario, knowledge_base, ac
                f.write('volumes:'+'\n')
                f.write('  ai_system:'+'\n')
                f.write('    external: true'+'\n')
-
-     """
-     version: "3.0"
-     services:
-     knowledge_base_EfficientTaskManager:
-     image: marcusgrum/knowledgebase_apple_banana_orange_pump_01
-     volumes:
-          - ai_system:/tmp/
-     command:
-     - sh
-     - "-c"
-     - |
-          rm -rf /tmp/EfficientTaskManager/knowledgeBase/ && mkdir -p /tmp/EfficientTaskManager/knowledgeBase/ && cp -r /knowledgeBase/ /tmp/EfficientTaskManager/;
-
-     activation_base_EfficientTaskManager:
-     image: marcusgrum/activationbase_orange_blurred_defect_05
-     volumes:
-          - ai_system:/tmp/
-     command:
-     - sh
-     - "-c"
-     - |
-          rm -rf /tmp/EfficientTaskManager/activationBase/ && mkdir -p /tmp/EfficientTaskManager/activationBase/ && cp -r /activationBase/ /tmp/EfficientTaskManager/;
-
-     # Use TensorFlow Lite Codebase container
-     code_base_EfficientTaskManager:
-     image: marcusgrum/codebase_ai_core_for_image_classification_tflite  # Assuming this image has TensorFlow Lite set up
-     volumes:
-          - ai_system:/tmp/
-     depends_on:
-          - "knowledge_base_EfficientTaskManager"
-          - "activation_base_EfficientTaskManager"
-     command:
-     - sh
-     - "-c"
-     - |
-          rm -rf /tmp/EfficientTaskManager/codeBase/ && mkdir -p /tmp/EfficientTaskManager/codeBase/ && cp -r /codeBase/ /tmp/EfficientTaskManager/;
-          python3 /tmp/EfficientTaskManager/codeBase/apply_tfliteSolution.py EfficientTaskManager X  # Ensure you're using the TensorFlow Lite script here
-
-     volumes:
-     ai_system:
-     external: true
-     """
-#code-block coral wieder reinmachen
 
 def build_docker_compose_file_for_apply_annSolution_of_transportClassification(
           scenario, 
