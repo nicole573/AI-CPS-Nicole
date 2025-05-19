@@ -65,7 +65,7 @@ try:
 except Exception as e:
     print(f"Could not determine board type: {e}")
 
-print(f"Coral Dev Board detected: {jetson_nano}")
+print(f"Coral Dev Board detected: {coral_dev_board}")
 
 # Nicole: parameter für Nvidia Jetson Nano
 jetson_nano = False
