@@ -65,7 +65,21 @@ try:
 except Exception as e:
     print(f"Could not determine board type: {e}")
 
-print(f"Coral Dev Board detected: {coral_dev_board}")
+print(f"Coral Dev Board detected: {jetson_nano}")
+
+# Nicole: parameter für Nvidia Jetson Nano
+jetson_nano = False
+try:
+    if os.path.exists("/proc/device-tree/model"):
+        with open("/proc/device-tree/model", "r") as f:
+            device_model = f.read().lower()
+            if "NVIDIA Jetson Nano Developer Kit" in device_model:
+                jetson_nano = True
+
+except Exception as e:
+    print(f"Could not determine board type: {e}")
+
+print(f"NVIDIA Jetson Nano Developer Kit detected: {jetson_nano}")
 
 # Log directory for task results
 project_root = os.getcwd()  # main dir
