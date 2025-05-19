@@ -1,19 +1,23 @@
-FROM nvcr.io/nvidia/l4t-base:r32.7.6-tf2.7-py3
+FROM nvcr.io/nvidia/l4t-cuda:12.6.11-runtime
 
 # Set working directory
 WORKDIR /app
 
 # Copy application code into the container
-COPY . /app
+COPY . /codeBase/
+
+# Install pip
+RUN apt-get update
+RUN apt-get install -y python3-pip
 
 # Install Python dependencies
-RUN pip install --no-cache-dir \
+RUN pip3 install --no-cache-dir \
     matplotlib \
     Pillow \
     paho-mqtt \
-    numpy
+    numpy \
+    scipy \
+    tensorflow
 
-# Install TensorFlow for Jetson Nano (prebuilt wheel)
-RUN pip3 install --no-cache-dir \
-    https://developer.download.nvidia.com/compute/redist/jp/v46/tensorflow/tensorflow-2.11.0+nv22.06-cp36-cp36m-linux_aarch64.whl
+
 
