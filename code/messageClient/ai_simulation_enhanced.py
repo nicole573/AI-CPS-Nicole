@@ -73,7 +73,7 @@ try:
     if os.path.exists("/proc/device-tree/model"):
         with open("/proc/device-tree/model", "r") as f:
             device_model = f.read().lower()
-            if "NVIDIA Jetson Nano Developer Kit" in device_model:
+            if "nvidia jetson nano developer kit" in device_model:
                 jetson_nano = True
 
 except Exception as e:
