@@ -23,7 +23,7 @@ import platform
 import numpy
 import socket
 import random
-import realize_scenarios as executor
+import realize_scenarios_custom as executor
 import threading
 from queue import Queue
 from datetime import datetime
@@ -293,8 +293,15 @@ def task_worker():
         # Coral Dev Board: Anderes Image verwenden
         if hostArch == "aarch64" and coral_dev_board:
             # Passe das Image ggf. an (hier als Beispiel)
-            code_base = "curlynici/tflite_image"
-
+            code_base = "curlynici/coral_tflite_image"
+            boardtype = "coral_dev_board"
+                # NVIDIA Jetson Nano: Anderes Image verwenden
+        elif hostArch == "aarch64" and jetson_nano:
+            # Passe das Image ggf. an (hier als Beispiel)
+            code_base = "curlynici/nvidia_jetson_tf_image"
+            boardtype = "jetson_nano"
+        else:
+            boardtype = "raspberry_pi"
         
         if receiver == client_id:
             executor.realize_scenario(
@@ -310,6 +317,7 @@ def task_worker():
                 receiver, 
                 client_id, 
                 hostArch,
+                boardtype,
                 sub_process_method="sequential")
             client.publish(MQTT_Topic_Results, client_id + ': This is a result indication! I have processed the ann request.')
             print(f"Task {scenario} executed by {client_id}.")
