@@ -298,7 +298,7 @@ def task_worker():
                 # NVIDIA Jetson Nano: Anderes Image verwenden
         elif hostArch == "aarch64" and jetson_nano:
             # Passe das Image ggf. an (hier als Beispiel)
-            #code_base = "curlynici/nvidia_jetson_tf_image"
+            code_base = "curlynici/nvidia_jetson_tf_image"
             boardtype = "jetson_nano"
         else:
             boardtype = "raspberry_pi"
