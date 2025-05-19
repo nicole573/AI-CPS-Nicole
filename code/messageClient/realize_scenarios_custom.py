@@ -261,7 +261,7 @@ def build_docker_compose_file_for_apply_annSolution(scenario, knowledge_base, ac
                f.write('      rm -rf /tmp/'+sender+'/activationBase/ && mkdir -p /tmp/' + sender+'/activationBase/ && cp -r /activationBase/ /tmp/'+sender+'/;'+'\n')
                f.write('  code_base_'+sender+':\n')
                f.write('    user: root'+'\n') # e.g. marcusgrum/codebase_ai_core_for_image_classification_aarch64
-               f.write('    image: ' + code_base + '\n')
+               f.write('    image: ' + code_base + '_' + hostArch + '\n')
                f.write('    volumes:'+'\n')
                f.write('       - ai_system:/tmp/'+''+'\n')
                f.write('    runtime: nvidia'+'\n') # Nicole: added for jetson nano
