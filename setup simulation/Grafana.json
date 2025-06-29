@@ -1,0 +1,899 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 12,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 5,
+      "panels": [],
+      "title": "Grüne Verteilung, 50 Inferenz-Aufgaben",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 0,
+        "y": 1
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "fee9g3g1n6p6of"
+          },
+          "query": "from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) =>\r\n      r._measurement == \"exp13\" and\r\n      r._field       == \"conn_clients\" and\r\n      r.plug         == \"Shelly1_ThinkPad\"\r\n  )\r\n  |> aggregateWindow(\r\n      every: 1m,          // 1-Minuten-Buckets\r\n      fn:     last,       // oder mean, max, min etc.\r\n      createEmpty: false  // leere Buckets weglassen\r\n    )\r\n  |> yield(name: \"conn_clients_1m\")\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Clients",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "kWh"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 2,
+        "y": 1
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"energy\")\r\n  |> group()\r\n  |> sum(column: \"_value\")",
+          "refId": "A"
+        }
+      ],
+      "title": "∑ Energieverbrauch",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "gCO₂"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 5,
+        "y": 1
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"co2_grey\")\r\n  |> group()\r\n  |> sum(column: \"_value\")",
+          "refId": "A"
+        }
+      ],
+      "title": "∑ CO₂ - E.ON Mix",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 8,
+        "y": 1
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"price_grey\")\r\n  |> group()\r\n  |> sum(column: \"_value\")",
+          "refId": "A"
+        }
+      ],
+      "title": "∑ Kosten - E.ON Mix",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "gCO₂"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 11,
+        "y": 1
+      },
+      "id": 27,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"co2_green\")\r\n  |> group()\r\n  |> sum(column: \"_value\")",
+          "refId": "A"
+        }
+      ],
+      "title": "∑ CO₂ - E.ON Öko",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 14,
+        "y": 1
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"price_green\")\r\n  |> group()\r\n  |> sum(column: \"_value\")",
+          "refId": "A"
+        }
+      ],
+      "title": "∑ Kosten - E.ON Öko",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 0,
+        "y": 4
+      },
+      "id": 9,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"iteration\" and r.plug == \"Shelly1_ThinkPad\")\r\n  |> last()\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Iteration",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "kWh"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 2,
+        "y": 4
+      },
+      "id": 25,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "energy = from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"energy\")\r\n  |> group()\r\n  |> sum(column: \"_value\")\r\n  |> rename(columns: {_value: \"total_energy\"})\r\n  |> set(key: \"join_key\", value: \"static\")\r\n\r\niteration = from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"iteration\")\r\n  |> last()\r\n  |> rename(columns: {_value: \"latest_iteration\"})\r\n  |> set(key: \"join_key\", value: \"static\")\r\n\r\njoin(\r\n  tables: {energy: energy, iteration: iteration},\r\n  on: [\"join_key\"]\r\n)\r\n|> map(fn: (r) => ({\r\n    _time: r._time,\r\n    _value: r.total_energy / float(v: r.latest_iteration)\r\n  }))\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Ø Energieverbrauch",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "gCO₂"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 5,
+        "y": 4
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "co2_grey = \r\n  from(bucket: \"greenai_experiment18\")\r\n    |> range(start: -6h)\r\n    |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"co2_grey\")\r\n    |> group()                     // alle Serien in einer Tabelle bündeln\r\n    |> sum(column: \"_value\")\r\n    |> rename(columns: {_value: \"total_co2_grey\"})\r\n    |> set(key: \"join_key\", value: \"static\")\r\n\r\niteration = \r\n  from(bucket: \"greenai_experiment18\")\r\n    |> range(start: -6h)\r\n    |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"iteration\")\r\n    |> group(columns: [])          // nur ein Wert\r\n    |> last()\r\n    |> rename(columns: {_value: \"latest_iteration\"})\r\n    |> set(key: \"join_key\", value: \"static\")\r\n\r\njoin(\r\n  tables: {co2: co2_grey, it: iteration},\r\n  on: [\"join_key\"]\r\n)\r\n  |> map(fn: (r) => ({\r\n      _time: r._time,\r\n      _value: if r.latest_iteration > 0 \r\n               then r.total_co2_grey / float(v: r.latest_iteration) \r\n               else 0.0\r\n    }))\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Ø CO₂ - E.ON Mix",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 8,
+        "y": 4
+      },
+      "id": 28,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "price_grey = \r\n  from(bucket: \"greenai_experiment18\")\r\n    |> range(start: -6h)\r\n    |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"price_grey\")\r\n    |> group()                     // alle Serien in einer Tabelle bündeln\r\n    |> sum(column: \"_value\")\r\n    |> rename(columns: {_value: \"total_price_grey\"})\r\n    |> set(key: \"join_key\", value: \"static\")\r\n\r\niteration = \r\n  from(bucket: \"greenai_experiment18\")\r\n    |> range(start: -6h)\r\n    |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"iteration\")\r\n    |> group(columns: [])          // nur ein Wert\r\n    |> last()\r\n    |> rename(columns: {_value: \"latest_iteration\"})\r\n    |> set(key: \"join_key\", value: \"static\")\r\n\r\njoin(\r\n  tables: {cost: price_grey, it: iteration},\r\n  on: [\"join_key\"]\r\n)\r\n  |> map(fn: (r) => ({\r\n      _time: r._time,\r\n      _value: if r.latest_iteration > 0 \r\n               then r.total_price_grey / float(v: r.latest_iteration) \r\n               else 0.0\r\n    }))\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Ø Kosten - E.ON Mix",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "gCO₂"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 11,
+        "y": 4
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "co2_green = \r\n  from(bucket: \"greenai_experiment18\")\r\n    |> range(start: -6h)\r\n    |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"co2_green\")\r\n    |> group()                     // alle Serien in einer Tabelle bündeln\r\n    |> sum(column: \"_value\")\r\n    |> rename(columns: {_value: \"total_co2_green\"})\r\n    |> set(key: \"join_key\", value: \"static\")\r\n\r\niteration = \r\n  from(bucket: \"greenai_experiment18\")\r\n    |> range(start: -6h)\r\n    |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"iteration\")\r\n    |> group(columns: [])          // nur ein Wert\r\n    |> last()\r\n    |> rename(columns: {_value: \"latest_iteration\"})\r\n    |> set(key: \"join_key\", value: \"static\")\r\n\r\njoin(\r\n  tables: {co2: co2_green, it: iteration},\r\n  on: [\"join_key\"]\r\n)\r\n  |> map(fn: (r) => ({\r\n      _time: r._time,\r\n      _value: if r.latest_iteration > 0 \r\n               then r.total_co2_green / float(v: r.latest_iteration) \r\n               else 0.0\r\n    }))",
+          "refId": "A"
+        }
+      ],
+      "title": "Ø CO₂ - E.ON Öko",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 14,
+        "y": 4
+      },
+      "id": 29,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "price_green = \r\n  from(bucket: \"greenai_experiment18\")\r\n    |> range(start: -6h)\r\n    |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"price_green\")\r\n    |> group()                     // alle Serien in einer Tabelle bündeln\r\n    |> sum(column: \"_value\")\r\n    |> rename(columns: {_value: \"total_price_green\"})\r\n    |> set(key: \"join_key\", value: \"static\")\r\n\r\niteration = \r\n  from(bucket: \"greenai_experiment18\")\r\n    |> range(start: -6h)\r\n    |> filter(fn: (r) => r._measurement == \"exp13\" and r._field == \"iteration\")\r\n    |> group(columns: [])          // nur ein Wert\r\n    |> last()\r\n    |> rename(columns: {_value: \"latest_iteration\"})\r\n    |> set(key: \"join_key\", value: \"static\")\r\n\r\njoin(\r\n  tables: {cost: price_green, it: iteration},\r\n  on: [\"join_key\"]\r\n)\r\n  |> map(fn: (r) => ({\r\n      _time: r._time,\r\n      _value: if r.latest_iteration > 0 \r\n               then r.total_price_green / float(v: r.latest_iteration) \r\n               else 0.0\r\n    }))",
+          "refId": "A"
+        }
+      ],
+      "title": "Ø Kosten - E.ON Öko",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "fee9g3g1n6p6of"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 17,
+        "x": 0,
+        "y": 8
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "query": "from(bucket: \"greenai_experiment18\")\r\n  |> range(start: -6h)\r\n  |> filter(fn: (r) =>\r\n    r._measurement == \"exp13\" and r._field == \"apower\"\r\n  )\r\n  |> keep(columns: [\"_time\", \"_value\", \"plug\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Stromverbrauch Clients",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "1s",
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "40x10 Grüne Verteilung neu",
+  "uid": "feoymdpkkpfr4c",
+  "version": 4
+}
