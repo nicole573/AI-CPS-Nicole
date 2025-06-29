@@ -1,0 +1,15 @@
+Raspberry Pi 5 16GB RAM:
+
+ssh pi@<IP-Adresse>
+Passwort eingeben: pi5
+
+Raspberry Pi 5 8GB RAM:
+#hier wurden versehentlich die Konfigurationen des Pi4 übernommen.
+
+ssh pi4@<IP-Adresse>
+Passwort: pi4
+
+Raspberry Pi 4 8GB RAM:
+
+ssh pi4@<IP-Adresse>
+Passwort: pi4

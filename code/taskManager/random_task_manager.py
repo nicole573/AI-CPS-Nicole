@@ -16,6 +16,12 @@ import numpy as np
 import json
 from collections import defaultdict
 
+# Aktuellen Dateipfad holen, dann ein Verzeichnis nach oben (../code)
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(base_dir)
+
+import messageClient.mqtt_broker_listener as broker_listener
+
 # Add the parent directory (where "taskGenerator" is) to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -78,8 +84,8 @@ columns = [
 df_client_power = pd.DataFrame(columns=columns)
 
 # This is needed when the client got no tasks
-client_ids = ["444626", "283436", "854514", "943099", "956975"] 
-idle_power_values = [11.36, 2.9, 11.315, 4.2, 72.7]  # Idle Power Values -> you have to collect them beforehand
+client_ids = ["213079", "665816", "194777", "627783", "810474"] 
+idle_power_values = [11.5, 14.5, 2.1, 1.9, 2.3]  # Idle Power Values -> you have to collect them beforehand
 
 df_idle_power = pd.DataFrame({
     "client_id": client_ids,
@@ -304,7 +310,7 @@ def load_tasks_from_file():
       os.makedirs(log_directory)
 
    # Change this if you use different generators!!
-   task_file = os.path.join(generator_dir, "generated_tasks.txt")
+   task_file = os.path.join(generator_dir, "testing_tt_tasks.txt")
 
    try:
       with open(task_file, 'r', encoding='utf-8') as file:
@@ -671,8 +677,16 @@ if __name__ == '__main__':
    # Set Last Will Message so the manager knows where not to give tasks anymore
    client.will_set(f"status/{client_id}", "Disconnected", qos=1, retain=True)
 
-   MQTT_Broker = get_broker_ip_via_file()
-   Broker_Port = 1883
+   # Get the broker ip from the mDNS
+   broker_info = broker_listener.discover_broker()
+   
+   if broker_info:
+      MQTT_Broker, Broker_Port = broker_info
+      print(f"Using broker: {MQTT_Broker}:{Broker_Port}")
+   else:
+      print("No MQTT broker discovered, using fallback IP.")
+      MQTT_Broker = get_broker_ip_via_file() or "localhost"
+      Broker_Port = 1883
 
    try:
       # Connect to MQTT broker

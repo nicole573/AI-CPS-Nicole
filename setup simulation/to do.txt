@@ -1,0 +1,10 @@
+- Repo lokal mit online vergleichen, Notwendiges noch hochpushen, unnötiges löschen -> sauber Stand online
+- Übertragung restlicher Metadaten auskommentieren?
+- Doku System hochfahren
+- Json Function-Nodes alle gleichziehen
+- Shelly code clearen, restliche .py´s evtl löschen/verschieben
+- JSON Node-Red und Grafana hier abspeichern
+- evtl. kleine Word-Datei mit paar Screenshots von Node-Red Flows, InfluxDB..
+
+Zeitaufwand: 2-3 Stunden
+

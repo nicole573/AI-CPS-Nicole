@@ -295,7 +295,7 @@ def task_worker():
             # Passe das Image ggf. an (hier als Beispiel)
             #code_base = "curlynici/coral_tflite_image"
             boardtype = "coral_dev_board"
-                # NVIDIA Jetson Nano: Anderes Image verwenden
+        # NVIDIA Jetson Nano: Anderes Image verwenden
         elif hostArch == "aarch64" and jetson_nano:
             # Passe das Image ggf. an (hier als Beispiel)
             code_base = "curlynici/nvidia_jetson_tf_image"
@@ -320,6 +320,8 @@ def task_worker():
                 boardtype,
                 sub_process_method="sequential")
             client.publish(MQTT_Topic_Results, client_id + ': This is a result indication! I have processed the ann request.')
+            #client.publish(f"{client_id}: scenario={scenario}, knowledge_base={knowledge_base}, activation_base={activation_base}, code_base={code_base}, learning_base={learning_base} - Task executed.")
+
             print(f"Task {scenario} executed by {client_id}.")
         task_queue.task_done()
 
