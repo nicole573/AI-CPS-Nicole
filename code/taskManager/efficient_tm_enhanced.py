@@ -496,7 +496,7 @@ def distribute_tasks_to_clients(client, task_distribution):
             task_string = "\n".join(tasks)
             topic = f"tasks/{client_id}"
             client.publish(topic, task_string, qos=1)
-            client.publish("start_stop/taskWorker", 1, qos=1) #Nicole: direkt nach publish von den tasks!
+            client.publish("start_stop/taskWorker", 1, qos=1) #Nicole Status=1 = Start der Messung 
             start_task_session(client_id)
             task_count[client_id] = len(tasks)
             current_timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))  # Aktueller Zeitstempel #Nicole
@@ -732,7 +732,7 @@ def on_message(client, userdata, msg):
             stop_distribution = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(stop_distribution_timestamp))  # Formatierter Zeitstempel
 
             print(f"All tasks have been processed: clients_with_tasks = {finisher_counter}, init_tasks {task_num}, stop_time: {stop_distribution}")
-            client.publish("start_stop/taskWorker", 0, qos=1) # status=0 when all clients worked the tasks
+            client.publish("start_stop/taskWorker", 0, qos=1) #Nicole Status=0 = Stop der Messung
             client.publish("tasks_done", "done", qos=1) # publish message to tg
 
             print("handling idle clients..")
