@@ -1,5 +1,3 @@
-#Hi
-
 
 # Welcome to the Platform for AI-based Cyber-Physical Systems
 
